@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 口譯講義 | California Superbike School</title>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--red:#E10600;--black:#0D0D0D;--dark:#151515;--gray:#1F1F1F;--light:#2A2A2A;--white:#FFF;--yellow:#FFD700;--blue:#00A8E8;--green:#00C864}
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Titillium Web',sans-serif;background:var(--black);color:var(--white);line-height:1.5}
+        header{background:var(--dark);border-bottom:3px solid var(--red);padding:.8rem 1rem;position:sticky;top:0;z-index:100}
+        .hdr{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+        .logo{display:flex;align-items:center;gap:.8rem}
+        .logo-circle{width:48px;height:48px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem}
+        .logo-txt h1{font-size:1rem;font-weight:700;letter-spacing:.5px;line-height:1.2}
+        .logo-txt span{font-size:.65rem;color:var(--red);text-transform:uppercase;letter-spacing:2px;font-weight:600}
+        #search{padding:.5rem 1rem;background:var(--gray);border:1px solid #333;border-radius:4px;color:white;font-family:inherit;font-size:.85rem;width:220px;outline:none}
+        #search:focus{border-color:var(--red)}
+        #search::placeholder{color:#666}
+        nav{background:var(--dark);overflow-x:auto;border-bottom:1px solid #222}
+        nav::-webkit-scrollbar{height:0}
+        .nav-inner{display:flex;max-width:1400px;margin:0 auto}
+        nav a{padding:.7rem 1rem;color:#777;text-decoration:none;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+        nav a:hover{color:white;border-color:var(--red)}
+        main{max-width:1400px;margin:0 auto;padding:1rem;padding-bottom:4rem}
+        .sec{background:var(--dark);border-radius:6px;margin-bottom:1rem;border:1px solid #222;overflow:hidden}
+        .sec-h{background:linear-gradient(90deg,var(--red) 0%,#900 100%);padding:.8rem 1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+        .sec-h h2{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+        .sec-h .arr{transition:transform .3s}
+        .sec-h.open .arr{transform:rotate(180deg)}
+        .sec-b{display:none;padding:1rem}
+        .sec-b.open{display:block}
+        .sub{font-size:.75rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin:1.2rem 0 .6rem;padding-bottom:.4rem;border-bottom:1px solid #333}
+        .sub:first-child{margin-top:0}
+        .terms{display:grid;gap:.4rem}
+        .t{background:var(--gray);padding:.6rem .8rem;border-radius:4px;border-left:3px solid var(--red)}
+        .t:hover{background:var(--light)}
+        .t.match{background:rgba(255,215,0,.15);border-left-color:var(--yellow)}
+        .t-en{font-weight:600;color:white;font-size:.9rem}
+        .t-zh{color:var(--yellow);font-weight:600;font-size:.85rem}
+        .t-py{color:#666;font-size:.75rem;font-style:italic}
+        .t-note{color:#888;font-size:.75rem;margin-top:.2rem}
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.4rem}
+        .g{background:var(--gray);padding:.5rem .6rem;border-radius:4px;text-align:center;border-bottom:2px solid var(--red)}
+        .g .en{font-weight:600;font-size:.8rem}
+        .g .zh{color:var(--yellow);font-size:.75rem}
+        .info{background:rgba(225,6,0,.1);border:1px solid var(--red);border-radius:4px;padding:.8rem;margin-bottom:.8rem}
+        .info.blue{background:rgba(0,168,232,.1);border-color:var(--blue)}
+        .info.green{background:rgba(0,200,100,.1);border-color:var(--green)}
+        .info.orange{background:rgba(255,150,0,.1);border-color:#ff9600}
+        .info-t{font-weight:700;font-size:.8rem;text-transform:uppercase;margin-bottom:.4rem;color:var(--red)}
+        .info.blue .info-t{color:var(--blue)}
+        .info.green .info-t{color:var(--green)}
+        .info.orange .info-t{color:#ff9600}
+        .info p,.info li{font-size:.85rem}
+        .info ul,.info ol{margin-left:1.2rem}
+        .info li{margin:.2rem 0}
+        .quote{background:var(--gray);border-left:3px solid var(--yellow);padding:.8rem 1rem;margin:.6rem 0;border-radius:0 4px 4px 0}
+        .quote .en{font-style:italic}
+        .quote .zh{color:var(--yellow);margin-top:.3rem}
+        .sr{background:var(--gray);padding:.6rem .8rem .6rem 3.2rem;margin-bottom:.4rem;border-radius:4px;position:relative}
+        .sr::before{content:attr(data-n);position:absolute;left:.6rem;top:50%;transform:translateY(-50%);background:var(--red);color:white;padding:.15rem .4rem;border-radius:3px;font-size:.65rem;font-weight:700}
+        .qa{background:var(--gray);padding:.6rem .8rem;margin-bottom:.4rem;border-radius:4px}
+        .qa-q{font-weight:600}
+        .qa-a{color:var(--yellow);margin-top:.2rem}
+        .tw{background:var(--gray);padding:.5rem .8rem;margin-bottom:.3rem;border-radius:4px;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+        .tw-zh{color:var(--yellow);font-weight:700;min-width:70px}
+        .tw-arr{color:var(--red)}
+        .tw-en{color:white}
+        .dlg{background:var(--gray);border-radius:4px;padding:.8rem;margin-bottom:.8rem}
+        .dlg-t{font-weight:700;color:var(--blue);margin-bottom:.6rem;font-size:.85rem}
+        .d-line{padding:.5rem 0;border-bottom:1px solid #333}
+        .d-line:last-child{border-bottom:none}
+        .spk{display:inline-block;padding:.1rem .4rem;border-radius:3px;font-size:.65rem;font-weight:700;text-transform:uppercase;margin-bottom:.2rem}
+        .spk.coach{background:var(--blue)}
+        .spk.student{background:var(--yellow);color:black}
+        .spk.trans{background:var(--green)}
+        .top-btn{position:fixed;bottom:1rem;right:1rem;width:40px;height:40px;background:var(--red);color:white;border:none;border-radius:50%;cursor:pointer;opacity:0;transition:opacity .3s;font-size:1.2rem;z-index:1000}
+        .top-btn.show{opacity:1}
+        @media(max-width:600px){.hdr{justify-content:center}#search{width:100%;margin-top:.5rem}.grid{grid-template-columns:repeat(2,1fr)}.tw{flex-direction:column;align-items:flex-start;gap:.2rem}}
+        @media print{.sec-b{display:block!important}nav,#search,.top-btn{display:none}}
+    </style>
+</head>
+<body>
+<header>
+<div class="hdr">
+<div class="logo">
+<div class="logo-circle">CSS</div>
+<div class="logo-txt"><h1>California Superbike School</h1><span>Interpreter Guide • 大鵬灣</span></div>
+</div>
+<input type="text" id="search" placeholder="🔍 Search / 搜尋...">
+</div>
+</header>
+<nav><div class="nav-inner">
+<a href="#throttle">油門控制</a><a href="#steering">轉向操控</a><a href="#vision">視線路線</a><a href="#body">身體姿勢</a><a href="#braking">煞車</a><a href="#sr">生存反應</a><a href="#vehicle">車輛部件</a><a href="#track">賽道環境</a><a href="#physics">物理動態</a><a href="#taiwan">台灣口語</a><a href="#qa">教練問答</a><a href="#dialogue">實戰對話</a><a href="#quotes">金句</a>
+</div></nav>
+<main>
+
+<!-- ==================== 油門控制 ==================== -->
+<section class="sec" id="throttle">
+<div class="sec-h open"><h2>油門控制 Throttle Control</h2><span class="arr">▼</span></div>
+<div class="sec-b open">
+
+<div class="info"><div class="info-t">⚡ Throttle Control Rule #1 油門控制第一法則</div>
+<p><strong>"Once the throttle is cracked open, it is rolled on evenly, smoothly and continuously throughout the remainder of the turn."</strong></p>
+<p style="color:var(--yellow);margin-top:.4rem">一旦油門開啟，就要在整個彎道剩餘部分<strong>平穩、順暢且持續</strong>地加大油門。</p></div>
+
+<div class="sub">基本油門操作</div>
+<div class="terms">
+<div class="t s"><div class="t-en">crack the gas / crack open</div><div class="t-zh">開油門（初始開啟）</div><div class="t-py">kāi yóumén</div></div>
+<div class="t s"><div class="t-en">roll on the gas / throttle</div><div class="t-zh">補油（前段穩定持續補油，後段加重）</div><div class="t-py">bǔ yóu</div><div class="t-note">最重要的油門技巧！</div></div>
+<div class="t s"><div class="t-en">roll off the gas / throttle</div><div class="t-zh">收油門</div><div class="t-py">shōu yóumén</div></div>
+<div class="t s"><div class="t-en">chop off the gas</div><div class="t-zh">快速收油門</div><div class="t-py">kuàisù shōu yóumén</div><div class="t-note">⚠️ 不好！會讓車不穩定</div></div>
+<div class="t s"><div class="t-en">snap the throttle</div><div class="t-zh">暴力開油門</div><div class="t-note">⚠️ 危險動作</div></div>
+<div class="t s"><div class="t-en">throttle roll on / throttle roll off</div><div class="t-zh">補油 / 收油</div></div>
+</div>
+
+<div class="sub">油門控制方式</div>
+<div class="terms">
+<div class="t s"><div class="t-en">smooth throttle application</div><div class="t-zh">平順給油</div></div>
+<div class="t s"><div class="t-en">progressive throttle</div><div class="t-zh">漸進式給油</div></div>
+<div class="t s"><div class="t-en">maintenance throttle</div><div class="t-zh">維持油門（定速）</div></div>
+<div class="t s"><div class="t-en">inconsistent throttle</div><div class="t-zh">不穩定的油門控制</div><div class="t-py">bù wěndìng de yóumén kòngzhì</div></div>
+<div class="t s"><div class="t-en">throttle transition</div><div class="t-zh">油門切換</div></div>
+<div class="t s"><div class="t-en">coast through turn</div><div class="t-zh">滑行過彎</div><div class="t-py">huáxíng guò wān</div><div class="t-note">不好的習慣</div></div>
+<div class="t s"><div class="t-en">early throttle</div><div class="t-zh">提早補油</div></div>
+<div class="t s"><div class="t-en">acceleration (speed up)</div><div class="t-zh">加速</div><div class="t-py">jiāsù</div></div>
+<div class="t s"><div class="t-en">deceleration (slow down)</div><div class="t-zh">減速</div><div class="t-py">jiǎnsù</div></div>
+<div class="t s"><div class="t-en">constantly / continuously</div><div class="t-zh">持續地 / 連續地</div></div>
+<div class="t s"><div class="t-en">gently / gradually</div><div class="t-zh">輕柔地 / 漸漸地</div><div class="t-py">jiànjiàn de</div></div>
+<div class="t s"><div class="t-en">smoothly / evenly</div><div class="t-zh">順暢地 / 平均地</div></div>
+</div>
+
+<div class="info green"><div class="info-t">✓ 良好油門控制的好處</div><ul>
+<li>Weight transfer to the rear 重心轉移到後輪</li>
+<li>Suspension works in mid-stroke sweet spot 避震系統在最佳作動區間</li>
+<li>Bike becomes planted and predictable 車輛穩定且可預測</li>
+<li>Maintains traction 維持抓地力</li>
+<li>Increases ground clearance 增加離地間隙</li>
+<li>Smooth is fast 順暢就是快</li>
+</ul></div>
+
+<div class="info orange"><div class="info-t">✗ 收油的 6 個負面結果</div><ol>
+<li>Weight transfers forward changing available traction 重心前移改變可用抓地力</li>
+<li>Lost suspension's mid-stroke sweet spot 失去避震最佳區間</li>
+<li>Bike tends to overreact to rough pavement 車輛對路面反應過度</li>
+<li>Creates instability, bike initially runs wide 造成不穩定，車會跑寬</li>
+<li>Lose ground clearance on both ends 前後都失去離地間隙</li>
+<li>The bike slows down 車輛減速</li>
+</ol></div>
+
+<div class="info blue"><div class="info-t">ℹ️ 兩個例外情況</div><ul>
+<li>當車身接近直立準備出彎時，可以更 aggressive 給油</li>
+<li>Double-apex 連續彎之間可以收油</li>
+</ul></div>
+
+</div></section>
+
+<!-- ==================== 轉向操控 ==================== -->
+<section class="sec" id="steering">
+<div class="sec-h"><h2>轉向操控 Steering</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="info"><div class="info-t">⚡ Counter-Steering 逆向操舵</div>
+<p><strong>"To go right you apply pressure to the right handlebar. That action initiates the turn."</strong></p>
+<p style="color:var(--yellow);margin-top:.4rem">要往右轉，就對右側把手施加壓力。這是精確操控機車的<strong>唯一方法</strong>。</p></div>
+
+<div class="sub">核心轉向術語</div>
+<div class="terms">
+<div class="t s"><div class="t-en">counter-steering</div><div class="t-zh">逆操舵 / 逆向操舵</div><div class="t-py">nì cāoduò</div><div class="t-note">按右把手 → 車往右轉</div></div>
+<div class="t s"><div class="t-en">steering pressure / bar pressure</div><div class="t-zh">操舵力道</div><div class="t-py">cāoduò lìdào</div></div>
+<div class="t s"><div class="t-en">more pressure</div><div class="t-zh">更多壓力/力道</div></div>
+<div class="t s"><div class="t-en">quick turn (QT) / flick the bike</div><div class="t-zh">快速轉向</div><div class="t-py">kuàisù zhuǎnxiàng</div></div>
+<div class="t s"><div class="t-en">flick rate / steering rate</div><div class="t-zh">切入速度 / 傾斜速度</div><div class="t-py">qīngxié sùdù</div><div class="t-note">速度越快，切入速度也要越快</div></div>
+<div class="t s"><div class="t-en">lean angle</div><div class="t-zh">傾角</div><div class="t-py">qīngjiǎo</div></div>
+<div class="t s"><div class="t-en">steering correction</div><div class="t-zh">轉向修正</div></div>
+<div class="t s"><div class="t-en">steering the bike up</div><div class="t-zh">把車扶正</div></div>
+<div class="t s"><div class="t-en">input / rider inputs</div><div class="t-zh">輸入（操控動作）/ 騎士操控動作</div></div>
+<div class="t s"><div class="t-en">jab</div><div class="t-zh">快速施力</div></div>
+</div>
+
+<div class="sub">車身動態</div>
+<div class="terms">
+<div class="t s"><div class="t-en">run wide</div><div class="t-zh">外拋</div><div class="t-py">wài pāo</div></div>
+<div class="t s"><div class="t-en">pick up (the bike)</div><div class="t-zh">直立車身（出彎）/ 立車</div><div class="t-py">zhílì chēshēn</div></div>
+<div class="t s"><div class="t-en">changing line</div><div class="t-zh">變換路線</div><div class="t-py">biànhuàn lùxiàn</div></div>
+<div class="t s"><div class="t-en">run too far inside</div><div class="t-zh">太內側</div><div class="t-py">tài nèicè</div></div>
+<div class="t s"><div class="t-en">tighten</div><div class="t-zh">收緊路線</div></div>
+<div class="t s"><div class="t-en">get on line / hold a line</div><div class="t-zh">進入路線 / 維持路線</div></div>
+<div class="t s"><div class="t-en">remain</div><div class="t-zh">保持</div></div>
+<div class="t s"><div class="t-en">destabilize / upset the bike</div><div class="t-zh">讓車身不穩定</div><div class="t-py">ràng chēshēn bù wěndìng</div></div>
+<div class="t s"><div class="t-en">wiggle</div><div class="t-zh">擺動</div><div class="t-py">bǎidòng</div></div>
+<div class="t s"><div class="t-en">reverse</div><div class="t-zh">相反</div><div class="t-py">xiāngfǎn</div></div>
+</div>
+
+<div class="sub">3 Tools for Executing Your Line 執行路線的三個工具</div>
+<div class="terms">
+<div class="t s"><div class="t-en">1. Where you begin the turn</div><div class="t-zh">你在哪裡開始轉彎</div></div>
+<div class="t s"><div class="t-en">2. How quickly you flick the bike over</div><div class="t-zh">你多快速地切入</div></div>
+<div class="t s"><div class="t-en">3. How far you lean it</div><div class="t-zh">你傾斜多少角度</div></div>
+</div>
+
+<div class="info blue"><div class="info-t">ℹ️ Why Quick Flick Matters</div><ul>
+<li>Gets you on line earlier 更早上線</li>
+<li>Reduces total lean angle needed 減少總傾角</li>
+<li>Allows earlier throttle application 更早給油</li>
+<li>Provides better drive 更好的驅動力</li>
+<li>Gives more room on exit 出彎空間更大</li>
+<li>Reduces time spent at maximum lean 減少最大傾角時間</li>
+</ul></div>
+
+<div class="info orange"><div class="info-t">⚠️ When NOT to Quick Flick</div><ul>
+<li>Slippery pavement or weather 濕滑路面</li>
+<li>Cold tires or cold pavement 冷胎或冷路面</li>
+<li>Hand full of front brake 前煞拉到底</li>
+<li>Brand new or not scrubbed-in tires 全新或未磨合輪胎</li>
+<li>Totally worn out tires 完全磨損的輪胎</li>
+<li>At low speeds 低速時</li>
+</ul></div>
+
+<div class="info blue"><div class="info-t">ℹ️ Efficient Steering Technique</div>
+<p>Push <strong>FORWARD</strong> on the bars, not DOWN. Pushing forward is 100% efficient.</p>
+<p style="color:var(--yellow)">向<strong>前</strong>推把手，不是向下。向前推是 100% 有效率的。</p></div>
+
+</div></section>
+
+<!-- ==================== 視線路線 ==================== -->
+<section class="sec" id="vision">
+<div class="sec-h"><h2>視線與路線 Vision & Line</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="info"><div class="info-t">⚡ 核心原則</div>
+<p><strong>"The bike goes where your eyes go."</strong></p>
+<p style="color:var(--yellow)">車會往你眼睛看的方向去。</p></div>
+
+<div class="sub">視線技巧</div>
+<div class="terms">
+<div class="t s"><div class="t-en">look where you want to go</div><div class="t-zh">眼睛看向你要去的地方</div></div>
+<div class="t s"><div class="t-en">target fixation</div><div class="t-zh">視線鎖定（盯著障礙物）</div><div class="t-note">⚠️ 危險！會導致撞向你盯著看的東西</div></div>
+<div class="t s"><div class="t-en">visual panic</div><div class="t-zh">視覺恐慌</div><div class="t-note">眼睛亂看、失去 focus</div></div>
+<div class="t s"><div class="t-en">peripheral (vision)</div><div class="t-zh">餘光 / 周邊視覺</div><div class="t-py">yuánzhōu de / yúguāng</div></div>
+<div class="t s"><div class="t-en">direct vision / foveal vision</div><div class="t-zh">直接視線 / 中央視覺</div></div>
+<div class="t s"><div class="t-en">attention / focus / awareness</div><div class="t-zh">注意力 / 專注 / 意識</div></div>
+<div class="t s"><div class="t-en">horizon</div><div class="t-zh">地平線</div></div>
+<div class="t s"><div class="t-en">vanishing point</div><div class="t-zh">消失點</div></div>
+<div class="t s"><div class="t-en">narrowing point</div><div class="t-zh">收窄點</div></div>
+<div class="t s"><div class="t-en">prepare</div><div class="t-zh">準備</div></div>
+</div>
+
+<div class="sub">彎道位置</div>
+<div class="terms">
+<div class="t s"><div class="t-en">turn-in point / turn point</div><div class="t-zh">入彎點</div><div class="t-py">rù wān diǎn</div></div>
+<div class="t s"><div class="t-en">apex</div><div class="t-zh">彎心 / 彎頂點</div><div class="t-note">彎道最內側的點</div></div>
+<div class="t s"><div class="t-en">apex orientation</div><div class="t-zh">彎心定位</div></div>
+<div class="t s"><div class="t-en">exit point / turn exit</div><div class="t-zh">出彎點</div><div class="t-py">chū wān</div></div>
+<div class="t s"><div class="t-en">coming into turn / coming off turn</div><div class="t-zh">進彎 / 出彎</div><div class="t-py">jìn wān / chū wān</div></div>
+<div class="t s"><div class="t-en">mid turn</div><div class="t-zh">彎中</div><div class="t-py">wān zhōng</div></div>
+<div class="t s"><div class="t-en">curve</div><div class="t-zh">彎</div><div class="t-py">wān</div></div>
+<div class="t s"><div class="t-en">entry speed</div><div class="t-zh">進彎速度</div></div>
+<div class="t s"><div class="t-en">timing / sense of timing</div><div class="t-zh">時機 / 時機感</div></div>
+</div>
+
+<div class="sub">參考點</div>
+<div class="terms">
+<div class="t s"><div class="t-en">reference point</div><div class="t-zh">參考點</div><div class="t-py">cānkǎo diǎn</div></div>
+<div class="t s"><div class="t-en">identify (your turn point)</div><div class="t-zh">辨識（你的入彎點）</div></div>
+<div class="t s"><div class="t-en">create / decide / test / find</div><div class="t-zh">創造 / 決定 / 測試 / 找到</div></div>
+<div class="t s"><div class="t-en">location / action / spot</div><div class="t-zh">位置 / 動作 / 定點</div></div>
+<div class="t s"><div class="t-en">stain / skid mark / oil mark</div><div class="t-zh">污漬 / 煞車痕 / 油漬</div></div>
+<div class="t s"><div class="t-en">crack in pavement</div><div class="t-zh">路面裂縫</div></div>
+<div class="t s"><div class="t-en">change in surface coloration</div><div class="t-zh">路面顏色變化</div></div>
+</div>
+
+<div class="sub">路線選擇</div>
+<div class="grid">
+<div class="g s"><div class="en">racing line</div><div class="zh">競速路線</div></div>
+<div class="g s"><div class="en">high line</div><div class="zh">外側路線</div></div>
+<div class="g s"><div class="en">mid line</div><div class="zh">中間路線</div></div>
+<div class="g s"><div class="en">low line</div><div class="zh">內側路線</div></div>
+<div class="g s"><div class="en">tight line</div><div class="zh">內線</div></div>
+<div class="g s"><div class="en">wide line</div><div class="zh">外線</div></div>
+<div class="g s"><div class="en">straight line</div><div class="zh">直線</div></div>
+<div class="g s"><div class="en">straightest line</div><div class="zh">最直的路線</div></div>
+<div class="g s"><div class="en">predictable line</div><div class="zh">可預測的路線</div></div>
+<div class="g s"><div class="en">line options</div><div class="zh">路線選項</div></div>
+</div>
+
+<div class="sub">進階路線技巧</div>
+<div class="terms">
+<div class="t s"><div class="t-en">wide entry, late apex</div><div class="t-zh">外側入彎、延遲過頂點</div><div class="t-note">晚入彎讓你更早回油</div></div>
+<div class="t s"><div class="t-en">late / early</div><div class="t-zh">晚 / 早</div></div>
+<div class="t s"><div class="t-en">before / after / left / right</div><div class="t-zh">之前 / 之後 / 左 / 右</div></div>
+<div class="t s"><div class="t-en">using all of the track</div><div class="t-zh">使用整個賽道寬度</div></div>
+<div class="t s"><div class="t-en">maximize / minimize</div><div class="t-zh">最大化 / 最小化</div></div>
+<div class="t s"><div class="t-en">accuracy / consistency</div><div class="t-zh">準確度 / 一致性</div><div class="t-py">yīzhì xìng</div></div>
+<div class="t s"><div class="t-en">improvement / understanding</div><div class="t-zh">進步 / 理解</div></div>
+</div>
+
+<div class="sub">彎道類型</div>
+<div class="terms">
+<div class="t s"><div class="t-en">decreasing radius turn (DR turn)</div><div class="t-zh">曲率變小彎道</div><div class="t-py">qūlǜ biàn xiǎo wān dào</div></div>
+<div class="t s"><div class="t-en">fast turn / slow turn</div><div class="t-zh">高速彎 / 低速彎</div><div class="t-py">gāosù wān / dī sù wān</div></div>
+<div class="t s"><div class="t-en">radius</div><div class="t-zh">半徑</div><div class="t-py">bànjìng</div></div>
+</div>
+
+<div class="info blue"><div class="info-t">ℹ️ 11 Things Affected by Turn Entry Point</div><ol>
+<li>Where the brakes go on 煞車點</li>
+<li>Where the brakes go off 放煞車點</li>
+<li>Where the throttle comes back on 回油時機</li>
+<li>Where the bike is pointed once fully leaned 車頭指向</li>
+<li>Where you will finish the turn 出彎位置</li>
+<li>How much room at exit 出彎空間</li>
+<li>Where you will downshift 降檔時機</li>
+<li>How much lean angle you will use 傾角大小</li>
+<li>How much steering corrections 轉向修正多寡</li>
+<li>How quickly/slowly you steer 轉向速度</li>
+<li>How much approach speed 入彎速度</li>
+</ol></div>
+
+</div></section>
+
+<!-- ==================== 身體姿勢 ==================== -->
+<section class="sec" id="body">
+<div class="sec-h"><h2>身體姿勢 Body Position</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="sub">基本姿勢術語</div>
+<div class="terms">
+<div class="t s"><div class="t-en">body position</div><div class="t-zh">身體姿勢</div></div>
+<div class="t s"><div class="t-en">hang off</div><div class="t-zh">身體外掛 / 側掛（身體與車身同側）</div><div class="t-py">cè guà</div></div>
+<div class="t s"><div class="t-en">cross up</div><div class="t-zh">擰麻花（身體與臀部位置不同側）</div><div class="t-py">níng máhuā</div><div class="t-note">⚠️ 錯誤姿勢！減少控制力</div></div>
+<div class="t s"><div class="t-en">lean with bike</div><div class="t-zh">與車一起傾斜</div></div>
+<div class="t s"><div class="t-en">counter-leaning</div><div class="t-zh">反向傾斜</div><div class="t-note">身體往外、車往內 - 生存反應之一</div></div>
+<div class="t s"><div class="t-en">straighten up / straight up</div><div class="t-zh">直立起身體</div><div class="t-py">zhílì qǐ shēntǐ</div></div>
+<div class="t s"><div class="t-en">separation</div><div class="t-zh">分離（身體與車的分離）</div></div>
+</div>
+
+<div class="sub">重心與平衡</div>
+<div class="terms">
+<div class="t s"><div class="t-en">weight transfer / balance</div><div class="t-zh">重心轉移 / 平衡</div></div>
+<div class="t s"><div class="t-en">center of gravity / center of mass</div><div class="t-zh">重心</div></div>
+<div class="t s"><div class="t-en">distribution of loads</div><div class="t-zh">前後輪的負重比例</div><div class="t-py">qiánhòu lún de fùzhòng bǐlì</div></div>
+<div class="t s"><div class="t-en">frontward / rearward</div><div class="t-zh">朝前的 / 向後的</div><div class="t-py">cháo qián de / xiànghòu de</div></div>
+<div class="t s"><div class="t-en">forward / down</div><div class="t-zh">向前 / 向下</div></div>
+</div>
+
+<div class="sub">腿部位置</div>
+<div class="terms">
+<div class="t s"><div class="t-en">inside leg / outside leg</div><div class="t-zh">內側腿 / 外側腿</div></div>
+<div class="t s"><div class="t-en">lock your outside leg</div><div class="t-zh">外側腿夾緊</div></div>
+<div class="t s"><div class="t-en">lock on (with legs)</div><div class="t-zh">用腿固定</div></div>
+<div class="t s"><div class="t-en">butt cheek (cheek)</div><div class="t-zh">半邊屁股</div><div class="t-py">bànbiān pìgu</div></div>
+</div>
+
+<div class="sub">上半身與核心</div>
+<div class="terms">
+<div class="t s"><div class="t-en">torso</div><div class="t-zh">上半身</div><div class="t-py">shàngbànshēn</div></div>
+<div class="t s"><div class="t-en">core</div><div class="t-zh">核心</div><div class="t-py">héxīn</div></div>
+<div class="t s"><div class="t-en">chin</div><div class="t-zh">下巴</div><div class="t-py">xiàbā</div></div>
+<div class="t s"><div class="t-en">grip the tank / hold onto tank</div><div class="t-zh">夾緊油箱 / 抓緊油箱</div></div>
+</div>
+
+<div class="sub">放鬆與緊繃</div>
+<div class="terms">
+<div class="t s"><div class="t-en">stay loose / relaxed</div><div class="t-zh">保持放鬆</div></div>
+<div class="t s"><div class="t-en">loosen up</div><div class="t-zh">鬆弛、自然</div><div class="t-py">sōngchí, zìrán</div></div>
+<div class="t s"><div class="t-en">stiffly</div><div class="t-zh">僵硬地</div><div class="t-py">jiāngyìng dì</div></div>
+<div class="t s"><div class="t-en">tension / restriction</div><div class="t-zh">緊繃 / 限制</div></div>
+<div class="t s"><div class="t-en">fatigue / tired</div><div class="t-zh">疲勞</div></div>
+<div class="t s"><div class="t-en">worn out</div><div class="t-zh">身體筋疲力盡、輪胎用盡</div><div class="t-py">shēntǐ jīnpílìjìn</div></div>
+<div class="t s"><div class="t-en">blisters</div><div class="t-zh">水泡</div></div>
+<div class="t s"><div class="t-en">unnecessary</div><div class="t-zh">不必要的</div></div>
+</div>
+
+<div class="info green"><div class="info-t">✓ 正確外掛要點</div><ul>
+<li><strong>Hang off EARLY:</strong> 在收油之前就移動重心</li>
+<li><strong>Not too far:</strong> 一邊屁股離座就夠了</li>
+<li><strong>Lock on with legs:</strong> 用油箱和腳踏穩定，不是用把手</li>
+<li><strong>Stay loose:</strong> 上半身放鬆，抓太緊反而更糟</li>
+</ul></div>
+
+<div class="info orange"><div class="info-t">✗ Cross-up 的問題</div>
+<p>Cross-up (身體外、車內): Reduces control, exaggerates lean angle, makes rider twisted and tight</p>
+<p style="color:var(--yellow)">擰麻花：減少控制力、誇大傾角、讓騎士扭曲緊繃</p></div>
+
+</div></section>
+
+<!-- ==================== 煞車技巧 ==================== -->
+<section class="sec" id="braking">
+<div class="sec-h"><h2>煞車技巧 Braking</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+<div class="terms">
+<div class="t s"><div class="t-en">braking</div><div class="t-zh">煞車</div></div>
+<div class="t s"><div class="t-en">brake marker</div><div class="t-zh">煞車點標記</div></div>
+<div class="t s"><div class="t-en">squeeze the brake</div><div class="t-zh">漸進式按壓煞車</div></div>
+<div class="t s"><div class="t-en">front brake / rear brake</div><div class="t-zh">前煞 / 後煞</div></div>
+<div class="t s"><div class="t-en">release the brake</div><div class="t-zh">放開煞車</div></div>
+<div class="t s"><div class="t-en">brake pressure</div><div class="t-zh">煞車力道</div></div>
+<div class="t s"><div class="t-en">trail braking</div><div class="t-zh">帶煞過彎</div><div class="t-note">進階技巧：入彎時仍保持些許煞車</div></div>
+<div class="t s"><div class="t-en">lock up</div><div class="t-zh">煞車鎖死</div><div class="t-note">⚠️ 危險狀況</div></div>
+<div class="t s"><div class="t-en">hand full of front brake</div><div class="t-zh">前煞拉到底</div></div>
+</div>
+</div></section>
+
+<!-- ==================== 生存反應 ==================== -->
+<section class="sec" id="sr">
+<div class="sec-h"><h2>Survival Reactions 生存反應</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="info orange"><div class="info-t">⚠️ 什麼是生存反應？</div>
+<p>騎士在恐慌或壓力下<strong>本能產生的錯誤動作</strong>。這些反應會毀掉騎士的自信和控制。</p></div>
+
+<div class="quote"><div class="en">"Survival reactions, or 'S.R.s', ruin a rider's hopes of being confident and in control."</div><div class="zh">生存反應毀掉騎士自信和控制的希望。</div></div>
+
+<div class="sub">8 種生存反應</div>
+<div class="sr s" data-n="SR#1"><div class="t-en">Rolling off the throttle</div><div class="t-zh">收油門</div><div class="t-note">在彎中突然收油/反覆開關油門</div></div>
+<div class="sr s" data-n="SR#2"><div class="t-en">Tightening on the bars</div><div class="t-zh">抓緊把手</div><div class="t-note">過度緊握把手，造成車身不穩</div></div>
+<div class="sr s" data-n="SR#3"><div class="t-en">Counter-leaning</div><div class="t-zh">反向傾斜</div><div class="t-note">身體往外、車往內，增加傾角但不緊彎</div></div>
+<div class="sr s" data-n="SR#4"><div class="t-en">Visual panic</div><div class="t-zh">視覺恐慌</div><div class="t-note">眼睛亂看、失去 focus</div></div>
+<div class="sr s" data-n="SR#5"><div class="t-en">Target fixation</div><div class="t-zh">視線鎖定</div><div class="t-note">盯著障礙物看，結果就撞上去</div></div>
+<div class="sr s" data-n="SR#6"><div class="t-en">No steering</div><div class="t-zh">不操舵</div><div class="t-note">在恐慌中僵住，不敢轉向</div></div>
+<div class="sr s" data-n="SR#7"><div class="t-en">Frozen on the bars</div><div class="t-zh">把手僵住</div><div class="t-note">身體緊繃，無法操作</div></div>
+<div class="sr s" data-n="SR#8"><div class="t-en">Braking in corners</div><div class="t-zh">彎中煞車</div><div class="t-note">在彎中突然煞車</div></div>
+
+<div class="info blue" style="margin-top:1rem"><div class="info-t">ℹ️ SR #2 的影響 (Holding on too tight)</div><ul>
+<li>Amplifies bumps and vibration 放大震動</li>
+<li>Causes front-end shake 造成車頭抖動</li>
+<li>Tires out your arms 手臂疲勞</li>
+<li>Distorts sense of speed 扭曲速度感</li>
+<li>Makes steering corrections 產生多餘的轉向修正</li>
+<li>Can cause slides 可能造成滑胎</li>
+</ul></div>
+
+<div class="sub">學員恐懼/信心問題</div>
+<div class="grid">
+<div class="g s"><div class="en">"I'm scared of..."</div><div class="zh">我害怕...</div></div>
+<div class="g s"><div class="en">"I don't feel confident"</div><div class="zh">我沒信心</div></div>
+<div class="g s"><div class="en">build confidence</div><div class="zh">建立信心</div></div>
+<div class="g s"><div class="en">comfort zone</div><div class="zh">舒適圈</div></div>
+<div class="g s"><div class="en">push your limits</div><div class="zh">突破極限</div></div>
+<div class="g s"><div class="en">mental block</div><div class="zh">心理障礙</div></div>
+<div class="g s"><div class="en">fear / confidence</div><div class="zh">恐懼 / 信心</div></div>
+</div>
+
+<div class="sub">技術困擾常用語</div>
+<div class="terms">
+<div class="t s"><div class="t-en">"The bike feels unstable"</div><div class="t-zh">車感覺不穩</div></div>
+<div class="t s"><div class="t-en">"I'm running wide"</div><div class="t-zh">我跑外側了（出彎太寬）</div></div>
+<div class="t s"><div class="t-en">understeer / oversteer</div><div class="t-zh">轉向不足 / 轉向過度</div></div>
+<div class="t s"><div class="t-en">chattering</div><div class="t-zh">抖動</div></div>
+<div class="t s"><div class="t-en">"I'm losing the front/rear"</div><div class="t-zh">前輪/後輪失去抓地力</div></div>
+<div class="t s"><div class="t-en">slip / slide / save</div><div class="t-zh">滑動 / 救車</div></div>
+<div class="t s"><div class="t-en">stability</div><div class="t-zh">穩定性</div></div>
+</div>
+
+</div></section>
+
+<!-- ==================== 車輛部件 ==================== -->
+<section class="sec" id="vehicle">
+<div class="sec-h"><h2>車輛部件 Vehicle Components</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="sub">懸吊系統</div>
+<div class="terms">
+<div class="t s"><div class="t-en">suspension</div><div class="t-zh">避震系統 / 懸吊</div><div class="t-py">xuán diào</div></div>
+<div class="t s"><div class="t-en">fork (front fork)</div><div class="t-zh">前叉</div></div>
+<div class="t s"><div class="t-en">shock</div><div class="t-zh">後避震</div></div>
+<div class="t s"><div class="t-en">topped out suspension</div><div class="t-zh">懸吊行程伸展過度</div><div class="t-py">xuán diào xíngchéng shēnzhǎn guòdù</div></div>
+</div>
+
+<div class="sub">輪胎</div>
+<div class="terms">
+<div class="t s"><div class="t-en">tire / tyre</div><div class="t-zh">輪胎</div></div>
+<div class="t s"><div class="t-en">contact patch</div><div class="t-zh">接地面積 / 輪胎與地面接觸面積</div><div class="t-py">lúntāi yǔ dìmiàn jiēchù miànjī</div></div>
+<div class="t s"><div class="t-en">traction</div><div class="t-zh">抓地力</div><div class="t-py">zhuā dìlì</div></div>
+<div class="t s"><div class="t-en">grip level</div><div class="t-zh">抓地程度</div></div>
+<div class="t s"><div class="t-en">tire profile</div><div class="t-zh">胎型</div><div class="t-py">tāi xíng</div></div>
+<div class="t s"><div class="t-en">traction control</div><div class="t-zh">循跡控制</div></div>
+</div>
+
+<div class="sub">操控部件</div>
+<div class="grid">
+<div class="g s"><div class="en">handlebar</div><div class="zh">把手</div></div>
+<div class="g s"><div class="en">clutch</div><div class="zh">離合器</div></div>
+<div class="g s"><div class="en">slip the clutch</div><div class="zh">半離合</div></div>
+<div class="g s"><div class="en">pedal</div><div class="zh">腳踏</div></div>
+<div class="g s"><div class="en">rear set</div><div class="zh">腳踏後移</div></div>
+<div class="g s"><div class="en">chassis</div><div class="zh">車身</div></div>
+<div class="g s"><div class="en">wheel base</div><div class="zh">軸距</div></div>
+<div class="g s"><div class="en">geometry</div><div class="zh">幾何設定</div></div>
+</div>
+
+<div class="sub">換檔</div>
+<div class="grid">
+<div class="g s"><div class="en">upshift</div><div class="zh">進檔</div></div>
+<div class="g s"><div class="en">downshift</div><div class="zh">退檔</div></div>
+<div class="g s"><div class="en">shift up / shift down</div><div class="zh">升檔 / 降檔</div></div>
+</div>
+
+<div class="sub">車輛狀態</div>
+<div class="terms">
+<div class="t s"><div class="t-en">alignment</div><div class="t-zh">前後胎一直線</div><div class="t-py">qiánhòu tāi yīzhíxiàn</div></div>
+<div class="t s"><div class="t-en">tank slapper</div><div class="t-zh">龍頭劇烈甩動</div><div class="t-py">lóngtóu jùliè shuǎi dòng</div></div>
+<div class="t s"><div class="t-en">highside / lowside</div><div class="t-zh">高側摔 / 低側摔</div></div>
+</div>
+
+<div class="sub">裝備 Gear</div>
+<div class="grid">
+<div class="g s"><div class="en">gear</div><div class="zh">裝備</div></div>
+<div class="g s"><div class="en">helmet</div><div class="zh">安全帽</div></div>
+<div class="g s"><div class="en">visor</div><div class="zh">面罩</div></div>
+<div class="g s"><div class="en">gloves</div><div class="zh">手套</div></div>
+<div class="g s"><div class="en">suit</div><div class="zh">連身皮衣</div></div>
+<div class="g s"><div class="en">boots</div><div class="zh">車靴</div></div>
+<div class="g s"><div class="en">knee sliders</div><div class="zh">膝蓋滑塊</div></div>
+<div class="g s"><div class="en">back protector</div><div class="zh">背部護具</div></div>
+</div>
+
+</div></section>
+
+<!-- ==================== 賽道環境 ==================== -->
+<section class="sec" id="track">
+<div class="sec-h"><h2>賽道環境 Track Environment</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="sub">路面</div>
+<div class="terms">
+<div class="t s"><div class="t-en">track surface / surface</div><div class="t-zh">路面</div></div>
+<div class="t s"><div class="t-en">pavement</div><div class="t-zh">道路</div><div class="t-py">dàolù</div></div>
+<div class="t s"><div class="t-en">asphalt</div><div class="t-zh">柏油</div><div class="t-py">bóyóu</div></div>
+<div class="t s"><div class="t-en">kerb / curb / rumble strip</div><div class="t-zh">路肩 / 路緣石</div><div class="t-py">lù yuánshí</div></div>
+<div class="t s"><div class="t-en">curbing</div><div class="t-zh">路緣</div></div>
+<div class="t s"><div class="t-en">bumpy</div><div class="t-zh">顛簸的</div><div class="t-py">diānbǒ de</div></div>
+<div class="t s"><div class="t-en">slippery / wet / rain</div><div class="t-zh">濕滑的 / 濕的 / 雨</div></div>
+</div>
+
+<div class="sub">賽道設施</div>
+<div class="grid">
+<div class="g s"><div class="en">pit lane</div><div class="zh">維修道</div></div>
+<div class="g s"><div class="en">runoff</div><div class="zh">緩衝區</div></div>
+<div class="g s"><div class="en">width / space</div><div class="zh">寬度 / 空間</div></div>
+<div class="g s"><div class="en">camber</div><div class="zh">傾斜度</div></div>
+<div class="g s"><div class="en">elevation</div><div class="zh">高度變化</div></div>
+<div class="g s"><div class="en">shape</div><div class="zh">形狀</div></div>
+<div class="g s"><div class="en">characteristic</div><div class="zh">特性</div></div>
+<div class="g s"><div class="en">danger</div><div class="zh">危險</div></div>
+</div>
+
+<div class="sub">活動術語</div>
+<div class="grid">
+<div class="g s"><div class="en">lap</div><div class="zh">單圈</div></div>
+<div class="g s"><div class="en">hot lap</div><div class="zh">全速單圈</div></div>
+<div class="g s"><div class="en">cool-down lap</div><div class="zh">緩速圈</div></div>
+<div class="g s"><div class="en">session</div><div class="zh">場次</div></div>
+<div class="g s"><div class="en">overtake</div><div class="zh">超車</div></div>
+<div class="g s"><div class="en">drive</div><div class="zh">出彎速度</div></div>
+<div class="g s"><div class="en">exit / speed</div><div class="zh">出彎 / 速度</div></div>
+<div class="g s"><div class="en">rate yourself</div><div class="zh">自我評分</div></div>
+</div>
+
+<div class="sub">旗號與安全</div>
+<div class="terms">
+<div class="t s"><div class="t-en">red flag</div><div class="t-zh">紅旗（全場停止）</div><div class="t-note">🚩 立即停止！</div></div>
+<div class="t s"><div class="t-en">yellow flag</div><div class="t-zh">黃旗（危險/減速）</div></div>
+<div class="t s"><div class="t-en">incident on track</div><div class="t-zh">賽道上有事故</div></div>
+<div class="t s"><div class="t-en">bike down</div><div class="t-zh">有車倒地</div></div>
+</div>
+
+</div></section>
+
+<!-- ==================== 物理動態 ==================== -->
+<section class="sec" id="physics">
+<div class="sec-h"><h2>物理動態 Physics & Forces</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+<div class="terms">
+<div class="t s"><div class="t-en">cornering force</div><div class="t-zh">橫向力</div><div class="t-py">héngxiàng lì</div></div>
+<div class="t s"><div class="t-en">counteract</div><div class="t-zh">抵銷離心力</div><div class="t-py">dǐ xiāo líxīnlì</div></div>
+<div class="t s"><div class="t-en">rotate</div><div class="t-zh">旋轉</div><div class="t-py">xuánzhuǎn</div></div>
+<div class="t s"><div class="t-en">wind drag</div><div class="t-zh">風阻</div><div class="t-py">fēngzǔ</div></div>
+<div class="t s"><div class="t-en">decreasing</div><div class="t-zh">減少</div><div class="t-py">jiǎnshǎo</div></div>
+<div class="t s"><div class="t-en">alternative</div><div class="t-zh">替代的、擇一的</div><div class="t-py">tìdài de</div></div>
+<div class="t s"><div class="t-en">trigger</div><div class="t-zh">造成</div><div class="t-py">zàochéng</div></div>
+<div class="t s"><div class="t-en">indicate</div><div class="t-zh">指出</div><div class="t-py">zhǐchū</div></div>
+<div class="t s"><div class="t-en">asset</div><div class="t-zh">有用的</div><div class="t-py">yǒuyòng de</div></div>
+<div class="t s"><div class="t-en">violate</div><div class="t-zh">違反</div><div class="t-py">wéifǎn</div></div>
+<div class="t s"><div class="t-en">step 1 / step 2</div><div class="t-zh">步驟一 / 步驟二</div></div>
+</div>
+</div></section>
+
+<!-- ==================== 台灣口語 ==================== -->
+<section class="sec" id="taiwan">
+<div class="sec-h"><h2>台灣機車圈口語對照</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="info blue"><div class="info-t">💡 為什麼需要這個？</div><p>學員可能使用台灣機車圈術語，你需要快速轉換成教練能理解的英文。</p></div>
+
+<div class="sub">過彎技巧</div>
+<div class="tw s"><span class="tw-zh">「壓車」</span><span class="tw-arr">→</span><span class="tw-en">lean the bike / lean into the corner</span></div>
+<div class="tw s"><span class="tw-zh">「帶煞」</span><span class="tw-arr">→</span><span class="tw-en">trail braking</span></div>
+<div class="tw s"><span class="tw-zh">「拋入」</span><span class="tw-arr">→</span><span class="tw-en">tip-in / flick into the corner</span></div>
+<div class="tw s"><span class="tw-zh">「做動」</span><span class="tw-arr">→</span><span class="tw-en">weight shift / initiate the turn</span></div>
+<div class="tw s"><span class="tw-zh">「站外側」</span><span class="tw-arr">→</span><span class="tw-en">weight on outside peg</span></div>
+<div class="tw s"><span class="tw-zh">「頂膝」</span><span class="tw-arr">→</span><span class="tw-en">push with inside knee / knee pressure</span></div>
+<div class="tw s"><span class="tw-zh">「磨膝/磨包」</span><span class="tw-arr">→</span><span class="tw-en">drag knee / knee down</span></div>
+<div class="tw s"><span class="tw-zh">「立車」</span><span class="tw-arr">→</span><span class="tw-en">stand the bike up / pick up the bike</span></div>
+
+<div class="sub">油門操作</div>
+<div class="tw s"><span class="tw-zh">「補油」</span><span class="tw-arr">→</span><span class="tw-en">blip the throttle / roll on</span></div>
+<div class="tw s"><span class="tw-zh">「灌油」</span><span class="tw-arr">→</span><span class="tw-en">pin it / full throttle</span></div>
+<div class="tw s"><span class="tw-zh">「收油」</span><span class="tw-arr">→</span><span class="tw-en">chop the throttle / roll off</span></div>
+<div class="tw s"><span class="tw-zh">「定風」</span><span class="tw-arr">→</span><span class="tw-en">maintain throttle / steady throttle</span></div>
+<div class="tw s"><span class="tw-zh">「抖油門」</span><span class="tw-arr">→</span><span class="tw-en">feather the throttle</span></div>
+<div class="tw s"><span class="tw-zh">「爆衝」</span><span class="tw-arr">→</span><span class="tw-en">surge / wheelie</span></div>
+
+<div class="sub">煞車相關</div>
+<div class="tw s"><span class="tw-zh">「點煞」</span><span class="tw-arr">→</span><span class="tw-en">tap the brake / stab the brake</span></div>
+<div class="tw s"><span class="tw-zh">「拉到底」</span><span class="tw-arr">→</span><span class="tw-en">squeeze hard / maximum braking</span></div>
+<div class="tw s"><span class="tw-zh">「鎖死」</span><span class="tw-arr">→</span><span class="tw-en">lock up</span></div>
+<div class="tw s"><span class="tw-zh">「ABS 跳」</span><span class="tw-arr">→</span><span class="tw-en">ABS kicking in</span></div>
+<div class="tw s"><span class="tw-zh">「煞不住」</span><span class="tw-arr">→</span><span class="tw-en">can't slow down enough</span></div>
+
+<div class="sub">車輛感受</div>
+<div class="tw s"><span class="tw-zh">「車很利」</span><span class="tw-arr">→</span><span class="tw-en">the bike is sharp / responsive</span></div>
+<div class="tw s"><span class="tw-zh">「很笨重」</span><span class="tw-arr">→</span><span class="tw-en">feels heavy / sluggish</span></div>
+<div class="tw s"><span class="tw-zh">「頭很輕」</span><span class="tw-arr">→</span><span class="tw-en">front end feels light</span></div>
+<div class="tw s"><span class="tw-zh">「抖抖的」</span><span class="tw-arr">→</span><span class="tw-en">chattering / unstable</span></div>
+<div class="tw s"><span class="tw-zh">「頂起來」</span><span class="tw-arr">→</span><span class="tw-en">pushing / tucking the front</span></div>
+<div class="tw s"><span class="tw-zh">「浮浮的」</span><span class="tw-arr">→</span><span class="tw-en">floating / not planted</span></div>
+<div class="tw s"><span class="tw-zh">「很黏」</span><span class="tw-arr">→</span><span class="tw-en">grippy / planted</span></div>
+
+</div></section>
+
+<!-- ==================== 教練問答 ==================== -->
+<section class="sec" id="qa">
+<div class="sec-h"><h2>教練常見問題 Coach Q&A</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="sub">油門相關</div>
+<div class="qa s"><div class="qa-q">How did that drill benefit you?</div><div class="qa-a">你覺得這個技巧對你來說有什麼幫助?</div></div>
+<div class="qa s"><div class="qa-q">Which turn did you get the best result?</div><div class="qa-a">哪一個彎你覺得表現最好?</div></div>
+<div class="qa s"><div class="qa-q">What is the purpose/reason of this drill?</div><div class="qa-a">這個技巧的用意是什麼?</div></div>
+<div class="qa s"><div class="qa-q">Which turn was most difficult for you?</div><div class="qa-a">哪一個彎對你來說最難?</div></div>
+<div class="qa s"><div class="qa-q">Which turn was your throttle control good?</div><div class="qa-a">哪一個彎你的油門控制最好?</div></div>
+<div class="qa s"><div class="qa-q">Did you run wide after starting the throttle?</div><div class="qa-a">你開啟油門之後有外拋嗎?</div></div>
+<div class="qa s"><div class="qa-q">If you get on the gas too aggressively or too early, will the bike run a wider line?</div><div class="qa-a">如果你油門補太重或是太早開油門, 你的車子會跑開嗎?</div></div>
+<div class="qa s"><div class="qa-q">Should the beginning of your roll on be aggressive or gentle?</div><div class="qa-a">開始補油的時候, 你應該要大力的還是平順的?</div></div>
+<div class="qa s"><div class="qa-q">Did you have to stop your roll on after you started your roll on?</div><div class="qa-a">在你開始補油之後, 你必須再次收油嗎?</div></div>
+<div class="qa s"><div class="qa-q">If your line was tighter on the exit, would you be able to roll on the gas more aggressively?</div><div class="qa-a">如果你出彎的路線更靠近內線一點, 你是否可以更大力一點補油?</div></div>
+<div class="qa s"><div class="qa-q">When should a rider start to roll on?</div><div class="qa-a">一個騎士應該在什麼時候開始補油?</div></div>
+<div class="qa s"><div class="qa-q">When you are rolling the throttle on, does the bike feel more stable?</div><div class="qa-a">當你補油的時候, 是否有感覺車身比較穩定?</div></div>
+<div class="qa s"><div class="qa-q">When you are rolling the throttle on, is the bike's line more predictable?</div><div class="qa-a">當你補油的時候, 車子的路線是否更容易預測?</div></div>
+<div class="qa s"><div class="qa-q">If you enter the corner too quickly, do you have to wait longer to begin rolling on the throttle?</div><div class="qa-a">如果你進彎速度太快, 你會需要等更久的時間才能再次補油嗎?</div></div>
+<div class="qa s"><div class="qa-q">Are you entering this corner too quickly / too slowly?</div><div class="qa-a">你進彎速度是否太快 / 太慢?</div></div>
+<div class="qa s"><div class="qa-q">Are you afraid to roll on more aggressively?</div><div class="qa-a">你會害怕再大力一點補油嗎?</div></div>
+<div class="qa s"><div class="qa-q">Do you begin rolling on the throttle before, at or after the apex?</div><div class="qa-a">你開始補油的時間點是在apex之前, apex上, 還是apex之後?</div></div>
+
+<div class="sub">教練常用指令</div>
+<div class="grid">
+<div class="g s"><div class="en">"Keep your vision up"</div><div class="zh">視線保持前方</div></div>
+<div class="g s"><div class="en">"Relax your upper body"</div><div class="zh">上半身放鬆</div></div>
+<div class="g s"><div class="en">"Feel the bike underneath you"</div><div class="zh">感受車身動態</div></div>
+<div class="g s"><div class="en">"Commit to the throttle"</div><div class="zh">果斷給油</div></div>
+<div class="g s"><div class="en">"Trust the tires"</div><div class="zh">相信輪胎抓地力</div></div>
+<div class="g s"><div class="en">"You're tensing up"</div><div class="zh">你太緊繃了</div></div>
+<div class="g s"><div class="en">"Smooth is fast"</div><div class="zh">順暢就是快</div></div>
+<div class="g s"><div class="en">"Let the bike work for you"</div><div class="zh">讓車輛幫你做事</div></div>
+<div class="g s"><div class="en">"Ride within your limits"</div><div class="zh">在你能力範圍內騎</div></div>
+<div class="g s"><div class="en">"Don't force it"</div><div class="zh">不要勉強</div></div>
+<div class="g s"><div class="en">"Look where you want to go"</div><div class="zh">看你想去的地方</div></div>
+</div>
+
+</div></section>
+
+<!-- ==================== 實戰對話 ==================== -->
+<section class="sec" id="dialogue">
+<div class="sec-h"><h2>實戰情境對話 Scenario Dialogues</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="dlg">
+<div class="dlg-t">情境一：早晨 Briefing（教室）</div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Today we're focusing on throttle control. The key principle is: once you've committed to the turn, you should be rolling on the throttle progressively all the way to the exit. No chopping, no hesitation. Smooth is fast."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「今天我們專注在油門控制。核心原則是：一旦你決定入彎，就要從那一刻開始逐漸加大油門，一路順暢地催到出彎。不要突然收油、不要猶豫。記住：順暢就是快。」</p></div>
+<div class="d-line"><span class="spk student">學員</span><p>「可是我如果入彎時速度太快怎麼辦？還是要繼續催油門嗎？」</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>"He's asking—if he feels he's entering too hot, should he still roll on the throttle?"</p></div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Good question. If you're truly coming in too fast, you've already made the mistake at the braking point. Don't try to fix it mid-corner by chopping the throttle—that'll unsettle the bike. Better to run a little wide and learn for next lap."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「好問題。如果你真的入彎太快，那錯誤其實發生在煞車點，不是在彎中。不要試圖在彎中突然收油門來修正——這會讓車變得不穩定。寧可這次跑寬一點出彎，下一圈記得調整煞車點。」</p></div>
+</div>
+
+<div class="dlg">
+<div class="dlg-t">情境二：賽道邊 One-on-One（檢討影片）</div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"See here? You're looking down at the apex. That's target fixation. Your bike goes where your eyes go. You need to look through the corner, past the apex, to where you want to exit."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「看到這裡嗎？你的視線盯著彎心。這叫做『視線鎖定』，眼睛看哪車就去哪。你需要把視線『穿過』彎心，看向你想要出彎的位置。」</p></div>
+<div class="d-line"><span class="spk student">學員</span><p>「可是我如果不看彎心，我怕會錯過那個點...」</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>"He's worried if he doesn't look at the apex, he'll miss it."</p></div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Trust me, you won't miss it. Your peripheral vision will catch it. The apex will come to you. But if you stare at it, you'll never be smooth through the turn. Try it next session—eyes up, look where you want to go."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「相信我，你不會錯過的。你的餘光會抓到彎心。彎心會『自己來找你』。但如果你一直盯著它看，你永遠沒辦法順暢過彎。下一節練習試試看——視線往前，看你想去的地方。」</p></div>
+</div>
+
+<div class="dlg">
+<div class="dlg-t">情境三：Pit Lane 緊急狀況</div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Hey, you okay? I saw you had a moment at Turn 7. What happened?"</p></div>
+<div class="d-line"><span class="spk student">學員</span><p>「我在第七彎的時候後輪突然滑了一下，嚇死我了...我不知道發生什麼事...」</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>"He felt the rear slide at Turn 7, got scared. He's not sure what caused it."</p></div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Okay, deep breath. You're fine. Look—your rear tire is still cold, see? Not enough heat cycles yet. Plus you might've been a bit abrupt on the throttle. The slide you felt was actually normal—the bike was working. You just need to trust it more."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「好，深呼吸。你沒事。你看——你的後輪還是冷的，看到嗎？還沒充分做熱。加上你可能油門給得有點突然。你感覺到的那個滑動其實是正常的——車子在做它該做的事。你只是需要更信任它。」</p></div>
+</div>
+
+<div class="dlg">
+<div class="dlg-t">情境四：午餐休息（非正式聊天）</div>
+<div class="d-line"><span class="spk student">學員</span><p>「欸我剛剛膝蓋有磨到地耶！人生第一次！」</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>"He just dragged knee for the first time, he's super stoked."</p></div>
+<div class="d-line"><span class="spk coach">Coach</span><p>"Nice! But remember—knee down is a result, not a goal. If you're chasing knee down, you'll compromise your body position. Focus on proper hang-off first, the knee will touch naturally."</p></div>
+<div class="d-line"><span class="spk trans">翻譯</span><p>「讚！但記住——膝蓋磨地是『結果』不是『目標』。如果你刻意追求磨膝蓋，反而會搞砸你的身體姿勢。專注在正確的重心外移，膝蓋自然就會碰到地面。」</p></div>
+</div>
+
+</div></section>
+
+<!-- ==================== 金句 ==================== -->
+<section class="sec" id="quotes">
+<div class="sec-h"><h2>Keith Code 金句 Key Quotes</h2><span class="arr">▼</span></div>
+<div class="sec-b">
+
+<div class="quote s"><div class="en">"Smooth is fast"</div><div class="zh">順暢就是快</div></div>
+<div class="quote s"><div class="en">"Once the throttle is cracked open, it is rolled on evenly, smoothly and continuously"</div><div class="zh">一旦油門開啟，就平穩、順暢且持續地加大</div></div>
+<div class="quote s"><div class="en">"Counter-steering is the only way to accurately steer a motorcycle"</div><div class="zh">逆向操舵是精確控制機車的唯一方式</div></div>
+<div class="quote s"><div class="en">"The bike goes where your eyes go"</div><div class="zh">車會往你眼睛看的方向去</div></div>
+<div class="quote s"><div class="en">"Ride within your limits"</div><div class="zh">在你的能力範圍內騎乘</div></div>
+<div class="quote s"><div class="en">"Survival reactions ruin a rider's hopes of being confident and in control"</div><div class="zh">生存反應毀掉騎士自信和控制的希望</div></div>
+<div class="quote s"><div class="en">"Good throttle control allows the suspension to work properly"</div><div class="zh">良好的油門控制讓避震系統正常運作</div></div>
+<div class="quote s"><div class="en">"Let the bike do its own thing, relaxed on the bars, is the right choice"</div><div class="zh">讓車自己做，把手放鬆，是正確選擇</div></div>
+<div class="quote s"><div class="en">"Later turn entry allows you to get back on the gas earlier"</div><div class="zh">晚入彎讓你更早回油</div></div>
+<div class="quote s"><div class="en">"As speed increases, so must your flick rate"</div><div class="zh">速度越快，切入速度也要越快</div></div>
+<div class="quote s"><div class="en">"Trust the tires"</div><div class="zh">相信輪胎抓地力</div></div>
+<div class="quote s"><div class="en">"Let the bike work for you"</div><div class="zh">讓車輛幫你做事</div></div>
+<div class="quote s"><div class="en">"Just press on the bar and the bike responds instantly"</div><div class="zh">只要按壓把手，車就會立即反應</div></div>
+<div class="quote s"><div class="en">"Counter-steering always works"</div><div class="zh">逆向操舵永遠有效</div></div>
+<div class="quote s"><div class="en">"It's the horizontal rotation of the bars that gets the job done"</div><div class="zh">是把手的水平旋轉完成轉向</div></div>
+
+</div></section>
+
+</main>
+
+<button class="top-btn" id="topBtn">↑</button>
+
+<script>
+// Section toggle
+document.querySelectorAll('.sec-h').forEach(h=>{h.addEventListener('click',()=>{h.classList.toggle('open');h.nextElementSibling.classList.toggle('open')})});
+// Search
+const search=document.getElementById('search'),items=document.querySelectorAll('.s');
+search.addEventListener('input',e=>{const q=e.target.value.toLowerCase().trim();items.forEach(el=>el.classList.remove('match'));if(q.length<2)return;document.querySelectorAll('.sec-b').forEach(b=>b.classList.add('open'));document.querySelectorAll('.sec-h').forEach(h=>h.classList.add('open'));items.forEach(el=>{if(el.textContent.toLowerCase().includes(q))el.classList.add('match')})});
+// Back to top
+const topBtn=document.getElementById('topBtn');window.addEventListener('scroll',()=>{topBtn.classList.toggle('show',window.scrollY>300)});topBtn.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'})});
+</script>
+</body>
+</html>
